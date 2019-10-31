@@ -1,3 +1,4 @@
+*This doc will be added to as more progress is made on the project*
 Language Identification of Vocal Lyrics in Songs
 Russell Brown
 Taylor LeBlond
