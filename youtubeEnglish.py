@@ -112,7 +112,7 @@ with youtube_dl.YoutubeDL(ydl_opts) as ydl:
     ydl.download(['https://www.youtube.com/watch?v=IcrbM1l_BoI'])
     ydl.download(['https://www.youtube.com/watch?v=vjW8wmF5VWc)'])
     ydl.download(['https://www.youtube.com/watch?v=PIh2xe4jnpk'])
-    ydl.download(['https://www.youtube.com/watch?v=uxpDa-c-4Mc'])
+    ydl.download(['https://www.youtube.com/watch?v=uxpDa-c-4Mc&list=PLlqfMtrmorvl1TU5fqoIukJ64THrqcIKK&index=6&t=0s'])
     ydl.download(['https://www.youtube.com/watch?v=oyEuk8j8imI'])
     ydl.download(['https://www.youtube.com/watch?v=xscJ8Lla6Gc'])
     ydl.download(['https://www.youtube.com/watch?v=rYEDA3JcQqw'])
