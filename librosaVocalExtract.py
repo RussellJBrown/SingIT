@@ -9,7 +9,7 @@ def to_str(var):
 
 
 def libroExtract(inputSong):
-    y, sr = librosa.load(inputSong,duration = 50)
+    y, sr = librosa.load(inputSong)
     S_full, phase = librosa.magphase(librosa.stft(y))
 
     S_filter = librosa.decompose.nn_filter(S_full,
@@ -38,7 +38,7 @@ def libroExtract(inputSong):
 
     #TODO: change to a string variable and add if statements for
     #other languages
-    f = open('NormalScatterFrench.txt','a')
+    f = open('NormalScatterEnglish.txt','a')
     f.write(to_str(normalMean))
     f.write(" ")
     f.write(to_str(normalSTD))
@@ -49,7 +49,7 @@ def libroExtract(inputSong):
 
     vocalMean = np.mean(S_foreground)
     vocalSTD = np.std(S_foreground)
-    f = open('VocalExtractedScatterFrench.txt','a')
+    f = open('VocalExtractedScatterEnglish.txt','a')
     f.write(to_str(vocalMean))
     f.write(" ")
     f.write(to_str(vocalSTD))
