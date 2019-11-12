@@ -5,11 +5,7 @@
 
 
 #This method is the main method
-#The Language Identification System
-#will have multiple options when running
-#Option 1: Train a Dataset
-#Option 2: Play a Song to determine the language of the Song
-#Insert more Options here...
+#For training the dataset.
 import sys
 #from ReadLiveAudio import *
 from CompareData import *
@@ -31,19 +27,22 @@ if __name__ == '__main__':
     dirJapanese = os.listdir(locationJapanese)
     dirFrench   = os.listdir(locationFrench)
     #for i in range(0,len(dirEnglish)):
-    #    print("Song Number: ")
+    #   print("Song Number: ")
     #    print(i)
     #    englishSong = dirEnglish[i]
     #    name, ext = os.path.splitext(englishSong)
     #    if(ext=='.wav'):
     #        output = readInWav(locationEnglish+"/",englishSong)
 
-    #end = timer()
-    #print(end-start)
 
-    #for j in range(0,len(dirGerman)):
-#    germanSong = dirGerman[j]
-#        output = waveFileReader(germanSong)
+
+    for j in range(0,len(dirGerman)):
+            print("Song Number: ")
+            print(j)
+            germanSong = dirGerman[j]
+            name, ext = os.path.splitext(germanSong)
+            if(ext=='.wav'):
+                output = readInWav(locationGerman+"/",germanSong)
 
     #for k in range(0,len(dirJapanese)):
 #    print("Song Number:")
@@ -52,13 +51,13 @@ if __name__ == '__main__':
 ##        if(ext=='.wav'):
 #                output = readInWav(locationJapanese+"/",japaneseSong)
 
-    for l in range(0,len(dirFrench)):
-        print("Song Number: ")
-        print(l)
-        frenchSong = dirFrench[l]
-        name, ext = os.path.splitext(frenchSong)
-        if(ext=='.wav'):
-            output = readInWav(locationFrench+"/",frenchSong)
+#    for l in range(0,len(dirFrench)):
+#        print("Song Number: ")
+#        print(l)
+#        frenchSong = dirFrench[l]
+#        name, ext = os.path.splitext(frenchSong)
+#        if(ext=='.wav'):
+#            output = readInWav(locationFrench+"/",frenchSong)
 
 
     #trainDataset()
