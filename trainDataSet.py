@@ -26,6 +26,7 @@ if __name__ == '__main__':
     dirGerman =   os.listdir(locationGerman)
     dirJapanese = os.listdir(locationJapanese)
     dirFrench   = os.listdir(locationFrench)
+
     #for i in range(0,len(dirEnglish)):
     #   print("Song Number: ")
     #    print(i)
