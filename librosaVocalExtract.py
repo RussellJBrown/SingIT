@@ -3,6 +3,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import librosa
 import librosa.display
+from collections import defaultdict
+import itertools
+import os
 
 def to_str(var):
     return str(list(np.reshape(np.asarray(var), (1, np.size(var)))[0]))[1:-1]
@@ -10,49 +13,49 @@ def to_str(var):
 #This method will read in the music datasets and perform two seperate
 #Analysis methods on the data, this data will then be input into a
 #Text file.
-def libroExtract(inputSong):
-    y, sr = librosa.load(inputSong,duration=50)
+def libroExtract(inputSong,Language):
+
+    name = os.path.splitext(inputSong)[0]
+    extension = os.path.splitext(inputSong)[1]
+    outSong = name + "Out" + extension
+    y, sr = librosa.load(inputSong,offset=0.0,duration=10)
     S_full, phase = librosa.magphase(librosa.stft(y))
-
-    S_filter = librosa.decompose.nn_filter(S_full,
-                                       aggregate=np.median,
-                                       metric='cosine',
-                                       width=int(librosa.time_to_frames(2, sr=sr)))
+    S_filter = librosa.decompose.nn_filter(S_full,aggregate=np.median,metric='cosine',width=int(librosa.time_to_frames(2, sr=sr)))
     S_filter = np.minimum(S_full, S_filter)
-    marginI, marginV = 2, 10
+    margin_v = 10    # The lower this number, the higher the vocal quality, but lower the amount of instrument reduction.
     power = 2
-    mask_i = librosa.util.softmask(S_filter,
-                               marginI * (S_full - S_filter),
-                               power=power)
-
-    mask_v = librosa.util.softmask(S_full - S_filter,
-                               marginV * S_filter,
-                               power=power)
+    mask_v = librosa.util.softmask(S_full - S_filter,margin_v * S_filter,power=power)
     S_foreground = mask_v * S_full
-    S_background = mask_i * S_full
+    librosa.output.write_wav(outSong,librosa.istft(S_foreground),sr)
+    #kClustering(outSong,Language)
+    return outSong
+
+
+def nextPhase(output,Language):
+    fileNames = "Vocal"+Language+".txt"
+    fileName3 = "MFCC"+Language+".txt"
+
+    y, sr = librosa.load(output,duration=50)
     centralCentroid = librosa.feature.spectral_centroid(y=y,sr=sr)
     normalMean = np.mean(centralCentroid)
     normalSTD  = np.std(centralCentroid)
-    #TODO: change to a string variable and add if statements for
-    #other languages
-    f = open('GermanScatterEnglish.txt','a')
+
+    f = open(fileNames,'a')
     f.write(to_str(normalMean))
     f.write(" ")
     f.write(to_str(normalSTD))
     f.write("\n")
     f.close()
 
-    #Currently Checking here for errors
-
-    vocalMean = np.mean(S_foreground)
-    vocalSTD = np.std(S_foreground)
-    f = open('GermanExtractedScatterEnglish.txt','a')
-    f.write(to_str(vocalMean))
+    f = open(fileName3,'a')
+    MFCC = librosa.feature.mfcc(y=y,sr=sr)
+    x = np.mean(MFCC)
+    y = np.std(MFCC)
+    f.write(to_str(x))
     f.write(" ")
-    f.write(to_str(vocalSTD))
+    f.write(to_str(y))
     f.write("\n")
     f.close()
-
 
 #This method will read in the music
 #and but it in the format to perform a comparison

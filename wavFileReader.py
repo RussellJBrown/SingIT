@@ -4,11 +4,10 @@ from librosaVocalExtract import *
 import os
 #read in list of wavefiles
 
-def readInWav(local, wavFile):
+def readInWav(local, wavFile,Language):
         wavFile = local+wavFile
-        libroExtract(wavFile)
-
-
+        outFile=libroExtract(wavFile,Language)
+        #nextPhase(outFile,Language)
         #commandExtractVocals(wavFile,wavOut)
         #fs, data = wavfile.read(wavOut)
         #plt.title('Foreground')

@@ -2,7 +2,7 @@
 import pyaudio
 import wave
 from librosaVocalExtract import *
-
+from compareOut import *
 
 #The reading in Live audio was taken from
 #StackOverFlow from User: Yevhen Kuzmovych and alr
@@ -39,5 +39,6 @@ def readInLiveAudio():
 
 if __name__ == '__main__':
     readInLiveAudio()
-    data = librosaVocalExtract("output.wav")
-    
+    libroExtract("output.wav","testLanguage")
+    Language = kMeanLiveAudio("output.wav")
+    print("The Language is: " +  Language)

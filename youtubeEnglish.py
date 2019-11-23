@@ -8,7 +8,7 @@ ydl_opts = {
     'format': 'bestaudio/best',
     'postprocessors': [{
         'key': 'FFmpegExtractAudio',
-        'preferredcodec': 'wav',
+        'preferredcodec': 'mp3',
         'preferredquality': '192',
     }],
 }
