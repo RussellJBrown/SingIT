@@ -1,3 +1,8 @@
+
+
+User Docs/Developer Docs are being created Project is currently messy but should be fixed in the future.
+
+
 *This doc will be added to as more progress is made on the project*
 Language Identification of Vocal Lyrics in Songs
 Russell Brown
