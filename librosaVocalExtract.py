@@ -10,23 +10,18 @@ import os
 def to_str(var):
     return str(list(np.reshape(np.asarray(var), (1, np.size(var)))[0]))[1:-1]
 
-#This method will read in the music datasets and perform two seperate
-#Analysis methods on the data, this data will then be input into a
-#Text file.
+#This method extracts 10 seconds of the song and outputs a new file
 def libroExtract(inputSong,Language):
-
     name = os.path.splitext(inputSong)[0]
     extension = os.path.splitext(inputSong)[1]
     outSong = name + "Out" + extension
-    y, sr = librosa.load(inputSong,offset=0.0,duration=10)
-    S_full, phase = librosa.magphase(librosa.stft(y))
-    S_filter = librosa.decompose.nn_filter(S_full,aggregate=np.median,metric='cosine',width=int(librosa.time_to_frames(2, sr=sr)))
-    S_filter = np.minimum(S_full, S_filter)
-    margin_v = 10    # The lower this number, the higher the vocal quality, but lower the amount of instrument reduction.
-    power = 2
-    mask_v = librosa.util.softmask(S_full - S_filter,margin_v * S_filter,power=power)
-    S_foreground = mask_v * S_full
-    librosa.output.write_wav(outSong,librosa.istft(S_foreground),sr)
+    outSong = outSong.replace("(","")
+    outSong = outSong.replace(")","")
+    outSong = outSong.replace("'","")
+    outSong = outSong.replace('"','')
+    outSong = outSong.replace(" ",'')
+    y, sr = librosa.load(inputSong,offset=35.0,duration=10)
+    librosa.output.write_wav(outSong,y,sr)
     #kClustering(outSong,Language)
     return outSong
 

@@ -7,6 +7,7 @@ import os
 def readInWav(local, wavFile,Language):
         wavFile = local+wavFile
         outFile=libroExtract(wavFile,Language)
+        return outFile
         #nextPhase(outFile,Language)
         #commandExtractVocals(wavFile,wavOut)
         #fs, data = wavfile.read(wavOut)

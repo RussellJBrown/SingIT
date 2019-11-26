@@ -2,7 +2,9 @@ from math import sqrt
 import librosa
 from sklearn.cluster import KMeans
 import numpy as np
+import sys
 from librosaVocalExtract import *
+from returnSubFiles import *
 def compareOutput(x,y):
     englishFile = "kClusteringEnglish.txt"
     frenchFile = "kClusteringFrench.txt"
@@ -124,79 +126,130 @@ def compareOutput(x,y):
 
 
 
+
+def spectral_centroid(x, samplerate=44100):
+    magnitudes = np.abs(np.fft.rfft(x)) # magnitudes of positive frequencies
+    length = len(x)
+    freqs = np.abs(np.fft.fftfreq(length, 1.0/samplerate)[:length//2+1]) # positive frequencies
+    return np.sum(magnitudes*freqs) / np.sum(magnitudes) # return weighted mean
+
+
+
+
 def kMeanLiveAudio(song):
     listLangauge = []
     X,sr = librosa.load(song)
+    centroid= spectral_centroid(X)
     Kmean = KMeans(n_clusters=21)
     X = np.reshape(X, (-1, 2))
     Kmean.fit(X)
-    kCluster=Kmean.cluster_centers_
+    kCluster = Kmean.cluster_centers_
     rows = kCluster.shape[0]
     cols = kCluster.shape[1]
+    #0: x>3000
+    #1: 3000>x and 3300<x
+    #2: 3300<x and 3600>x
+    #3: 3600<x and 3900>x
+    #4: 3900<x and 4200>x
+    #5: 4200<x and 4500>x
+    #6: 4500<x and 4800>x
+    #7: 4800<x and 5200>x
+    #8: 5200<x and 5500>x
+    #9: 5500<x and 5800>x
+    #10:5800<x and 6000>x
+    #11:6000<x
+    histogram = [0]*25
     for i in range(0,rows):
         for j in range(0,cols):
             if j%2==0:
-                x = kCluster[i,j]
-                y = kCluster[i,j+1]
-                language = compareOutput(x,y)
-                listLangauge.append(language)
-
-    count1 = 0
-    count2 = 0
-    count3 = 0
-    count4 = 0
-    count5 = 0
-    for i in listLangauge:
-        if i == "English":
-            count1+=1
-        elif i== "French":
-            count2+=1
-        elif i == "German":
-            count3+=1
-        elif i == "Japanese":
-            count4+=1
-        else:
-            count5+=1
-    if  count1>count2 and count1>count3 and count1>count4:
-        Language = "English"
-
-    elif count2>count1 and count2>count3 and count2>count4:
-        Language = "French"
-
-    elif count3>count1 and count3>count2 and count3>count4:
-        Language = "German"
-
-    elif count4>count1 and count3>count2 and count4>count3:
-        Language = "Japanese"
-    else:
-        Language = "Unknown Lanuage"
-
-
-    return Language
+                x = kCluster[i,j]*10000
+                y = kCluster[i,j+1]*10000
+                num = sqrt(x*x+y*y)
+                num=centroid-num
+                if 500>num:
+                    histogram[0]+=1
+                elif num>=500 and 800>num:
+                    histogram[1]+=1
+                elif num>=800 and 1100>num:
+                    histogram[2]+=1
+                elif num>=1100 and 1400>num:
+                    histogram[3]+=1
+                elif num>=1400 and 1700>num:
+                    histogram[4]+=1
+                elif num>=1700 and 2100>num:
+                    histogram[5]+=1
+                elif num>=2100 and 2400>num:
+                    histogram[6]+=1
+                elif num>=2400 and 2700>num:
+                    histogram[7]+=1
+                elif num>=2700 and 3000>num:
+                    histogram[8]+=1
+                elif num>=3000 and 3300>num:
+                    histogram[9]+=1
+                elif num>=3300 and 3600>num:
+                    histogram[10]+=1
+                elif num>=3600 and 3900>num:
+                    histogram[11]+=1
+                elif num>=3900 and 4200>num:
+                    histogram[12]+=1
+                elif num>=4200 and 4500>num:
+                    histogram[13]+=1
+                elif num>=4500 and 4800>num:
+                    histogram[14]+=1
+                elif num>=4800 and 5200>num:
+                    histogram[15]+=1
+                elif num>=5200 and 5500>num:
+                    histogram[16]+=1
+                elif num>=5500 and 5800>num:
+                    histogram[17]+=1
+                elif num>=5800 and 6100>num:
+                    histogram[18]+=1
+                elif num>=6100 and 6400>num:
+                    histogram[19]+=1
+                elif num>=6400 and 6700>num:
+                    histogram[20]+=1
+                elif num>=6700 and 7000>num:
+                    histogram[21]+=1
+                elif num>=7000 and 7300>num:
+                    histogram[22]+=1
+                elif num>=7600 and 7900>num:
+                    histogram[23]+=1
+                elif num>=7900:
+                    histogram[24]+=1
+    return histogram
 
 
 
 def testDataSet():
-    locationJapanese = "/home/russell/SingIT/French"
-    dirEnglish =  os.listdir(locationJapanese)
+    locationJapanese = "/home/russell/SingIT/outputFrench"
+    dirEnglish = getListOfFiles(locationJapanese)
+    histogramFinal = [0]*25
     count = 0
+    fileNames = "FrenchHist.txt"
     for i in dirEnglish:
-        name, ext = os.path.splitext(i)
-        out=name[-3:]
-        if(ext=='.wav' and out == "Out"):
-            song = locationJapanese+"/"+i
-            print(song)
-            Language=kMeanLiveAudio(song)
-            if Language == "French":
-                count += 1
-            print("The Language and Count is: " + Language)
-            print("")
-            print("")
-    print(count)
+        print(i)
+        if "vocals.wav" in i:
+                count+=1
+                print("Count: ")
+                print(count)
+                Language="temp"
+                histogram=kMeanLiveAudio(i)
+                print(histogram)
+                for i in range(0,len(histogramFinal)):
+                    histogramFinal[i]= histogramFinal[i] +  histogram[i]
 
+
+    for i in range(0,len(histogramFinal)):
+        histogramFinal[i]= (histogramFinal[i]/(21*count))
+    f = open(fileNames,'a')
+    f.write(to_str(histogramFinal))
+    f.write("\n")
+    f.close()
+    print(histogramFinal)
 
 
 if __name__ == '__main__':
     #Currently Being Used for Testing
-    kMeanLiveAudio(song)
-    print(count)
+    testDataSet()
+    #kMeanLiveAudio(song)
+    #print(count)

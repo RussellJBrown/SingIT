@@ -16,6 +16,7 @@ from librosaVocalExtract import *
 from timeit import default_timer as timer
 import os
 from pydub import AudioSegment
+from vocalExtractFromCommandLine import *
 
 def convertMP3(path,str):
 
@@ -35,59 +36,55 @@ def convertMP3(path,str):
 if __name__ == '__main__':
 
     start = timer()
-    locationEnglish = "/home/russell/SingIT/English"
-    locationGerman = "/home/russell/SingIT/German"
-    locationJapanese = "/home/russell/SingIT/Japanese"
-    locationFrench = "/home/russell/SingIT/French"
+    locationEnglish = "/media/russell/775C-44EC/English"
+    locationGerman = "/media/russell/775C-44EC/German"
+    locationJapanese = "/media/russell/775C-44EC/Japanese"
+    locationFrench = "/media/russell/775C-44EC/French"
 
 
 
-    dirEnglish =  os.listdir(locationEnglish)
-    #convertMP3(locationEnglish+"/",dirEnglish)
-    dirGerman =   os.listdir(locationGerman)
-    #convertMP3(locationGerman+"/",dirGerman)
-    dirJapanese = os.listdir(locationJapanese)
-    #convertMP3(locationJapanese+"/",dirJapanese)
-    dirFrench   = os.listdir(locationFrench)
-    #convertMP3(locationFrench+"/",dirFrench)
 
     dirEnglish =  os.listdir(locationEnglish)
     dirGerman =   os.listdir(locationGerman)
     dirJapanese = os.listdir(locationJapanese)
     dirFrench = os.listdir(locationFrench)
-
+    count = 0
     #for i in range(0,len(dirEnglish)):
-     #  print("Song Number: ")
-      # print(i)
-       #englishSong = dirEnglish[i]
-       #name, ext = os.path.splitext(englishSong)
+     #  englishSong = dirEnglish[i]
+      # name, ext = os.path.splitext(englishSong)
        #if(ext=='.wav'):
+        #    count +=1
+        #    print("Song Number: ")
+        #    print(count)
         #    output = readInWav(locationEnglish+"/",englishSong,"English")
-
+        #    betterVocalExtract(output)
 
     #for j in range(0,len(dirGerman)):
     #        print("Song Number: ")
     #        print(j)
     #        germanSong = dirGerman[j]
-    #        name, ext = os.path.splitext(germanSong)
     #        if(ext=='.wav'):
-    #             output = readInWav(locationGerman+"/",germanSong,"German")
+    #            output = readInWav(locationGerman+"/",germanSong,"German")
+    #            betterVocalExtract(output)
 
-    for k in range(0,len(dirJapanese)):
-            print("Song Number:")
-            print(k)
-            japaneseSong = dirJapanese[k]
-            name, ext = os.path.splitext(japaneseSong)
-            if(ext=='.wav'):
-                output = readInWav(locationJapanese+"/",japaneseSong,"Japanese")
+    #for k in range(0,len(dirJapanese)):
+    #        print("Song Number:")
+    #        print(k)
+    #        japaneseSong = dirJapanese[k]
+    #        name, ext = os.path.splitext(japaneseSong)
+    #        if(ext=='.wav'):
+    #            output = readInWav(locationJapanese+"/",japaneseSong,"Japanese")
+    #            betterVocalExtract(output)
+
     #            '''
-    #for l in range(0,len(dirFrench)):
-    #    print("Song Number: ")
-    #    print(l)
-    #    frenchSong = dirFrench[l]
-    #    name, ext = os.path.splitext(frenchSong)
-    #    if(ext=='.wav'):
-    #        output = readInWav(locationFrench+"/",frenchSong,"French")
-    #        '''
+    for l in range(0,len(dirFrench)):
+        print("Song Number: ")
+        print(l)
+        frenchSong = dirFrench[l]
+        name, ext = os.path.splitext(frenchSong)
+        if(ext=='.wav'):
+            output = readInWav(locationFrench+"/",frenchSong,"French")
+            betterVocalExtract(output)
+
 
     #trainDataset()
