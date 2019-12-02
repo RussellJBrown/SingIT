@@ -68,7 +68,7 @@ def findPercentile(bnum, lnum, index):
     else:
         return findPercentile(bnum,lnum,index-1)
 
-def predictor(arr, printMatrix, printPredictions):
+def predictor(arr, printStuff, printMatrix, printPredictions):
     if len(arr) < 13:
         print("Incompatible array size.")
     else:
@@ -83,20 +83,45 @@ def predictor(arr, printMatrix, printPredictions):
     for i in np.arange(13):
         for j in np.arange(4):
             predictions[j] = predictions[j] + bmatrix[i][j]
-    print("This was predicted as:")
-    if predictions[0] == np.min(predictions):
-        print("\tEnglish")
-    if predictions[1] == np.min(predictions):
-        print("\tFrench")
-    if predictions[2] == np.min(predictions):
-        print("\tJapanese")
-    if predictions[3] == np.min(predictions):
-        print("\tGerman")
+    if printStuff > 0:
+        print("This was predicted as:")
+        if predictions[0] == np.min(predictions):
+            print("\tEnglish")
+        if predictions[1] == np.min(predictions):
+            print("\tFrench")
+        if predictions[2] == np.min(predictions):
+            print("\tJapanese")
+        if predictions[3] == np.min(predictions):
+            print("\tGerman")
     if printMatrix > 0:
         print(bmatrix)
     if printPredictions > 0:
         print(predictions)
-        
+    if predictions[0] == np.min(predictions):
+            return 0
+    elif predictions[1] == np.min(predictions):
+            return 1
+    elif predictions[2] == np.min(predictions):
+            return 2
+    elif predictions[3] == np.min(predictions):
+            return 3
+
+# The following bit creates the confusion matrix.
+finalMatrix = np.array([[0]*4]*4)
+
+for i in np.arange(90):
+    a = predictor(EnglishPks[i],0,0,0)
+    finalMatrix[0][a] = finalMatrix[0][a] + 1
+    a = predictor(FrenchPks[i],0,0,0)
+    finalMatrix[1][a] = finalMatrix[1][a] + 1
+    a = predictor(JapanesePks[i],0,0,0)
+    finalMatrix[2][a] = finalMatrix[2][a] + 1
+    a = predictor(GermanPks[i],0,0,0)
+    finalMatrix[3][a] = finalMatrix[3][a] + 1    
+print(finalMatrix)
+plt.matshow(finalMatrix)
+
+# The following bit is for testing single songs, and includes a graph.
 EnglishSums = np.array([2531, 1894, 1942, 1816, 1638, 1510, 1211, 1050, 1069, 1110, 1017, 1100, 1420])/90
 FrenchSums = np.array([2233, 1830, 2065, 1753, 1698, 1364, 1150, 1130, 1104, 1022, 1131, 1199, 1494])/90
 GermanSums = np.array([2318, 1899, 1898, 1693, 1587, 1395, 1265, 1312, 1359, 1464, 1565, 1628, 2200])/90
@@ -106,7 +131,7 @@ xaxis13 = np.arange(13)+1
 # inputarr is where you put the numbers you want to test for a single song.
 inputarr = np.array([45, 50, 28, 18, 13, 9, 11, 17, 15, 18, 31, 30, 50])
 
-predictor(inputarr,0,1)
+predictor(inputarr,1,0,1)
 
 plt.scatter(xaxis13,EnglishSums) # Blue
 plt.scatter(xaxis13,FrenchSums) # Orange
