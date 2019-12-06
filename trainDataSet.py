@@ -18,19 +18,6 @@ import os
 from pydub import AudioSegment
 from vocalExtractFromCommandLine import *
 
-def convertMP3(path,str):
-
-    for i in str:
-        iNew= path+i
-        print(iNew)
-        name = os.path.splitext(iNew)[0]
-        extension = os.path.splitext(iNew)[1]
-        if(extension==".mp3"):
-            sound = AudioSegment.from_mp3(iNew)
-            name = name+".wav"
-            sound.export(name,format="wav")
-            os.remove(iNew)
-
 
 
 if __name__ == '__main__':
